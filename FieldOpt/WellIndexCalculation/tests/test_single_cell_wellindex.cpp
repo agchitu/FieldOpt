@@ -97,6 +97,7 @@ TEST_F(SingleCellWellIndexTest, WellIndexValueVertical) {
     double wi = wblocks[1].cell_well_index_matrix();
     EXPECT_NEAR(wi, 0.073221321, delta/100);
 }
+
 TEST_F(SingleCellWellIndexTest, WellIndexValueHorzX) {
     // Use first cell (global index 0)
     //    auto cell_1 = grid_->GetCell(0);

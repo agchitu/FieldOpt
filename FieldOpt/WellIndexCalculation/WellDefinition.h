@@ -1,5 +1,5 @@
 /******************************************************************************
-   Created by einar on 8/23/18.
+   Created by einar on 8/23/18, copied from WellindexCalculator.h.
    Copyright (C) 2017 Einar J.M. Baumann <einar.baumann@gmail.com>
 
    This file is part of the FieldOpt project.
@@ -33,6 +33,7 @@ namespace WellIndexCalculation {
 
 class WellDefinition {
  public:
+  WellDefinition() {wellname="noname";}
   string wellname;
   vector<Vector3d> heels;
   vector<Vector3d> toes;

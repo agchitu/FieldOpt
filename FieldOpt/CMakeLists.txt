@@ -137,7 +137,7 @@ option(BUILD_BENCHMARK "Build exec for wic RMS benchmark" OFF)
 
 # Include Eigen: Options ===================================
 if(NOT COMPILATION_AT_MAUR)
-  find_package(Eigen3 REQUIRED)
+  find_package(Eigen3)
   include_directories(${EIGEN3_INCLUDE_DIR})
   message(STATUS "EIGEN3_INCLUDE_DIR: ${EIGEN3_INCLUDE_DIR}")
 endif()

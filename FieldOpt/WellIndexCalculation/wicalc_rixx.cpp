@@ -29,6 +29,7 @@
 // ---------------------------------------------------------
 using std::cout;
 using std::endl;
+using std::flush;
 using std::list;
 using std::pair;
 using std::string;
@@ -54,7 +55,6 @@ namespace WellIndexCalculation {
 // =========================================================
 wicalc_rixx::wicalc_rixx(Grid::Grid *grid,
                          RICaseData *ricasedata) {
-
   if (grid != nullptr) {
     AddGrid(grid);
     SetGridActive(grid);
@@ -63,7 +63,6 @@ wicalc_rixx::wicalc_rixx(Grid::Grid *grid,
     grid_ = nullptr;
     ricasedata_ = nullptr;
   }
-
 }
 
 // -----------------------------------------------------------------
@@ -239,7 +238,7 @@ void
 wicalc_rixx::ComputeWellBlocks(
     vector<IntersectedCell> &well_indices,
     WellDefinition &well) {
-
+    
   // -------------------------------------------------------
   stringstream str;
   cvf::ref<WellPath> wellPath = nullptr;

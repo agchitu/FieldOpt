@@ -9,7 +9,8 @@ message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
 
 # Options ==============================================================
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(WIC_LIB_TARGET wellindexcalculator)
+set(WIC_LIB_TARGET wicalc_lib)
+set(WIC_APP_TARGET wicalc_app)
 set(WIC_LIB_TARGET_ADG _wic-rixx)
 
 # ResInsight ===========================================================
@@ -24,7 +25,6 @@ include_directories(${Qt5Core_INCLUDE_DIRS})
 set(CMAKE_CXX_STANDARD 11)
 add_compile_options(-std=c++11)
 
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/resinxx/rixx_app_fwk
     ${CMAKE_CURRENT_SOURCE_DIR}/resinxx/rixx_core_geom
@@ -32,30 +32,33 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/resinxx/rixx_grid
 )
 
-message(".............................................................")
 if (NOT BUILD_WIC_ADGPRS)
+message(".............................................................")
+message("configure wicalc library...")
 
 # controls ricasedata delete
 add_definitions(-DFIELDOPT_BUILD)
 
-add_library(${WIC_LIB_TARGET}
+add_library(${WIC_LIB_TARGET} SHARED
     intersected_cell.cpp
-#    wellindexcalculator.cpp
     #
     wicalc_rixx.cpp
     ${RIXX_ALL_CPP_FILES}
     #
-        WellDefinition.h)
+        WellDefinition.cpp)
 
-add_library(fieldopt::${WIC_LIB_TARGET}
-    ALIAS ${PROJECT_NAME})
+#add_library(${WIC_LIB_TARGET}_static STATIC
+#    intersected_cell.cpp
+#    #
+#    wicalc_rixx.cpp
+#    ${RIXX_ALL_CPP_FILES}
+#    #
+#        WellDefinition.cpp)
+
+#add_library(fieldopt::${WIC_LIB_TARGET}
+#    ALIAS ${WIC_LIB_TARGET})
 
 message(STATUS "Set WIC_LIB_TARGET: ${WIC_LIB_TARGET}")
-
-
-endif()
-
-if (NOT BUILD_WIC_ADGPRS)
 
 set_target_properties(${WIC_LIB_TARGET}
     PROPERTIES COMPILE_FLAGS "-fPIC")
@@ -67,15 +70,27 @@ target_link_libraries(${WIC_LIB_TARGET}
     PUBLIC ri:ert_ecl
     )
 
-install(TARGETS wellindexcalculator
+message(".............................................................")
+message("configure TNO wicalc standalone application...")
+add_executable(${WIC_APP_TARGET}
+    wicalc_main.cpp
+    intersected_cell.cpp
+    wicalc_rixx.cpp
+    ${RIXX_ALL_CPP_FILES}
+    WellDefinition.cpp
+)
+
+target_link_libraries(${WIC_APP_TARGET}
+      ${WIC_LIB_TARGET}
+    )
+
+install(TARGETS ${WIC_LIB_TARGET} ${WIC_APP_TARGET}
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib/static
     )
 
-
 endif()
-
 
 # Testing ==============================================================
 if (BUILD_TESTING AND NOT BUILD_WIC_ADGPRS AND NOT USE_SANITIZING)
